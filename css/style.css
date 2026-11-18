@@ -1,0 +1,357 @@
+/* ============================================================
+   木质数字拼图 - 样式表
+   采用 3D 写实木质风格：深色实木边框 + 浅胡桃木方块 + 立体阴影
+   ============================================================ */
+
+/* ---------- 全局重置 ---------- */
+* {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent; /* 去除手机点击高亮 */
+    user-select: none;                        /* 防止误选中文字 */
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+/* ---------- 页面背景：温暖深木色调 ---------- */
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* 手机较长时从顶部开始，避免内容被裁切 */
+    font-family: "Georgia", "Songti SC", "STSong", serif;
+    color: #f3e0b8;
+    /* 多层木纹渐变，营造温暖质感 */
+    background:
+        radial-gradient(circle at 20% 10%, rgba(120, 70, 30, 0.25), transparent 40%),
+        radial-gradient(circle at 80% 90%, rgba(80, 45, 20, 0.3), transparent 45%),
+        linear-gradient(135deg, #3a1f0e 0%, #5c3317 50%, #2a1608 100%);
+    background-attachment: fixed;
+    padding: 16px;
+}
+
+/* ---------- 主容器 ---------- */
+.game-wrap {
+    width: 100%;
+    max-width: 460px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* ---------- 标题 ---------- */
+.game-title {
+    font-size: 30px;
+    margin: 6px 0 4px;
+    letter-spacing: 4px;
+    color: #f6dca0;
+    text-shadow:
+        0 1px 0 #6b3a16,
+        0 2px 3px rgba(0, 0, 0, 0.6),
+        0 0 18px rgba(255, 200, 120, 0.25);
+}
+
+.subtitle {
+    font-size: 13px;
+    color: #c9a36a;
+    margin: 0 0 14px;
+    letter-spacing: 2px;
+}
+
+/* ---------- 信息栏：步数 / 时间 ---------- */
+.info-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto 14px;
+    padding: 10px 16px;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 14px;
+    /* 木牌质感 */
+    background:
+        linear-gradient(180deg, #8a5a2b 0%, #6e4220 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 220, 160, 0.25),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.4),
+        0 4px 10px rgba(0, 0, 0, 0.35);
+    border: 1px solid #3d2410;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 90px;
+}
+
+.info-label {
+    font-size: 12px;
+    color: #e9c988;
+    letter-spacing: 2px;
+    margin-bottom: 2px;
+}
+
+.info-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff4d6;
+    font-variant-numeric: tabular-nums; /* 数字等宽，跳动不晃 */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- 棋盘外框：深色实木边框 ---------- */
+.board-frame {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 14px;
+    border-radius: 18px;
+    /* 深实木框，带高光和阴影模拟厚度 */
+    background:
+        linear-gradient(145deg, #5b3216 0%, #3d210d 50%, #2a1607 100%);
+    box-shadow:
+        inset 0 2px 0 rgba(255, 200, 140, 0.18),   /* 顶部高光 */
+        inset 0 -3px 6px rgba(0, 0, 0, 0.55),       /* 内部底阴影 */
+        inset 3px 0 4px rgba(0, 0, 0, 0.35),
+        inset -3px 0 4px rgba(0, 0, 0, 0.35),
+        0 10px 22px rgba(0, 0, 0, 0.5),             /* 外阴影 */
+        0 2px 0 rgba(255, 180, 100, 0.1);
+    border: 2px solid #2a1607;
+}
+
+/* ---------- 棋盘网格区（木槽底面） ---------- */
+.board {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;            /* 正方形棋盘 */
+    border-radius: 10px;
+    /* 深色木槽：方块滑动的凹槽 */
+    background:
+        repeating-linear-gradient(
+            90deg,
+            #1c0e04 0px,
+            #1c0e04 2px,
+            #241207 2px,
+            #241207 4px
+        ),
+        linear-gradient(135deg, #1a0c03, #28140a);
+    box-shadow:
+        inset 0 4px 10px rgba(0, 0, 0, 0.8),   /* 槽内深陷感 */
+        inset 0 -2px 4px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+}
+
+/* ---------- 数字方块 ---------- */
+.tile {
+    position: absolute;
+    /* 方块尺寸用百分比，自适应棋盘大小 */
+    width: 25%;
+    height: 25%;
+    padding: 4px;
+    transition: left 0.18s ease, top 0.18s ease; /* 滑动动画 */
+    cursor: pointer;
+    will-change: left, top;
+}
+
+.tile-inner {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    font-weight: bold;
+    color: #3a1d08;
+    font-family: "Georgia", "Times New Roman", serif;
+    /* 浅胡桃木 / 橡木质感：多层渐变模拟木纹 */
+    background:
+        /* 细木纹 */
+        repeating-linear-gradient(
+            92deg,
+            rgba(120, 70, 30, 0.18) 0px,
+            rgba(120, 70, 30, 0.18) 1px,
+            transparent 1px,
+            transparent 4px
+        ),
+        /* 木色主渐变：左上亮、右下暗 */
+        linear-gradient(145deg, #e6b577 0%, #d09752 45%, #b87a3c 100%);
+    /* 立体厚度：顶部高光 + 底部暗边 + 外投影 */
+    box-shadow:
+        inset 0 2px 0 rgba(255, 240, 200, 0.6),  /* 顶部高光 */
+        inset 0 -4px 6px rgba(90, 45, 15, 0.45), /* 底部暗边=厚度 */
+        inset 2px 0 3px rgba(255, 220, 170, 0.3),
+        inset -2px 0 3px rgba(90, 45, 15, 0.3),
+        0 4px 6px rgba(0, 0, 0, 0.4);            /* 外投影 */
+    border: 1px solid #8a5424;
+    text-shadow: 0 1px 0 rgba(255, 240, 200, 0.5);
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+/* 悬停效果（电脑端） */
+@media (hover: hover) {
+    .tile:hover .tile-inner {
+        transform: translateY(-1px);
+        box-shadow:
+            inset 0 2px 0 rgba(255, 240, 200, 0.7),
+            inset 0 -4px 6px rgba(90, 45, 15, 0.45),
+            inset 2px 0 3px rgba(255, 220, 170, 0.3),
+            inset -2px 0 3px rgba(90, 45, 15, 0.3),
+            0 6px 10px rgba(0, 0, 0, 0.45);
+    }
+}
+
+/* 点击按下效果 */
+.tile:active .tile-inner {
+    transform: translateY(1px);
+    box-shadow:
+        inset 0 2px 4px rgba(90, 45, 15, 0.5),
+        inset 0 -2px 3px rgba(255, 220, 170, 0.2),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* 可移动方块的提示标识（可选高亮） */
+.tile.movable .tile-inner {
+    /* 略微提亮，引导玩家 */
+    filter: brightness(1.05);
+}
+
+/* ---------- 按钮 ---------- */
+.btn-row {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    padding: 12px 28px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    color: #3a1d08;
+    /* 木牌按钮质感 */
+    background: linear-gradient(145deg, #f0c585 0%, #d59a4e 100%);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 245, 210, 0.6),
+        inset 0 -3px 5px rgba(90, 45, 15, 0.4),
+        0 4px 8px rgba(0, 0, 0, 0.35);
+    border: 1px solid #8a5424;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 245, 210, 0.7),
+        inset 0 -3px 5px rgba(90, 45, 15, 0.4),
+        0 6px 12px rgba(0, 0, 0, 0.4);
+}
+
+.btn:active {
+    transform: translateY(1px);
+    box-shadow:
+        inset 0 2px 4px rgba(90, 45, 15, 0.5),
+        0 2px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ---------- 胜利弹窗 ---------- */
+.win-mask {
+    position: fixed;
+    inset: 0;
+    background: rgba(20, 10, 4, 0.75);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    backdrop-filter: blur(3px);
+}
+
+.win-mask.show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.win-card {
+    width: 86%;
+    max-width: 340px;
+    padding: 30px 24px 24px;
+    border-radius: 18px;
+    text-align: center;
+    color: #3a1d08;
+    background: linear-gradient(145deg, #f0c585 0%, #c98a3e 100%);
+    border: 2px solid #6e4220;
+    box-shadow:
+        inset 0 2px 0 rgba(255, 245, 210, 0.6),
+        0 15px 40px rgba(0, 0, 0, 0.5);
+    animation: popIn 0.4s cubic-bezier(0.18, 1.25, 0.4, 1);
+}
+
+@keyframes popIn {
+    from { transform: scale(0.7); opacity: 0; }
+    to   { transform: scale(1);   opacity: 1; }
+}
+
+.win-title {
+    font-size: 26px;
+    margin: 0 0 6px;
+    color: #2a1607;
+    letter-spacing: 3px;
+}
+
+.win-sub {
+    font-size: 14px;
+    color: #5a3618;
+    margin: 0 0 14px;
+}
+
+.win-stats {
+    font-size: 18px;
+    margin: 0 0 20px;
+    line-height: 1.9;
+    color: #3a1d08;
+}
+
+.win-stats b {
+    color: #8a1d1d;
+    font-size: 22px;
+}
+
+/* ---------- 胜利时方块整体微闪 ---------- */
+.board.win .tile-inner {
+    animation: tileGlow 1.2s ease-in-out infinite alternate;
+}
+
+@keyframes tileGlow {
+    from { filter: brightness(1); }
+    to   { filter: brightness(1.15); }
+}
+
+/* ---------- 小屏适配 ---------- */
+@media (max-width: 380px) {
+    .game-title { font-size: 24px; }
+    .tile-inner { font-size: 26px; }
+    .info-value { font-size: 18px; }
+    .btn { padding: 10px 20px; font-size: 14px; }
+}
+
+/* ---------- 提示文字（操作说明） ---------- */
+.tip {
+    margin-top: 14px;
+    font-size: 12px;
+    color: #b08a52;
+    line-height: 1.7;
+    letter-spacing: 1px;
+}

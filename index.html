@@ -1,98 +1,70 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的第一个 H5 游戏</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>木质数字拼图</title>
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: Arial, sans-serif;
-            color: white;
-            background: linear-gradient(135deg, #101a35, #263f70);
-        }
-
-        .game-box {
-            width: 90%;
-            max-width: 500px;
-            padding: 40px 25px;
-            text-align: center;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            border-radius: 24px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
-        }
-
-        h1 {
-            font-size: 32px;
-            margin-bottom: 15px;
-        }
-
-        p {
-            color: #cbd5e1;
-            line-height: 1.8;
-        }
-
-        button {
-            margin-top: 25px;
-            padding: 15px 40px;
-            border: none;
-            border-radius: 30px;
-            background: #38bdf8;
-            color: #102039;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background: #7dd3fc;
-            transform: scale(1.05);
-        }
-
-        #message {
-            margin-top: 25px;
-            min-height: 30px;
-            color: #fde68a;
-            font-size: 18px;
-        }
-    </style>
+    <!-- 引入外部样式表 -->
+    <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-    <div class="game-box">
-        <h1>🎮 我的第一个 H5 游戏</h1>
-        <p>游戏版本：V1.1</p>
+    <div class="game-wrap">
 
-        <p>
-            欢迎来到我的游戏世界！<br>
-            这是我使用 HTML 制作的第一个网页。
+        <!-- 标题区 -->
+        <h1 class="game-title">木 质 数 字 拼 图</h1>
+        <p class="subtitle">4 × 4 经典数字滑块</p>
+
+        <!-- 信息栏：步数 + 时间 -->
+        <div class="info-bar">
+            <div class="info-item">
+                <span class="info-label">步 数</span>
+                <span class="info-value" id="steps">0</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">时 间</span>
+                <span class="info-value" id="time">00:00</span>
+            </div>
+        </div>
+
+        <!-- 棋盘：外框 + 木槽 -->
+        <div class="board-frame">
+            <div class="board" id="board">
+                <!-- 数字方块由 game.js 动态生成 -->
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="btn-row">
+            <button class="btn btn-restart">重 新 开 始</button>
+        </div>
+
+        <!-- 操作提示 -->
+        <p class="tip">
+            点击空格旁边的方块即可移动<br>
+            电脑端也可用方向键 / WASD 操作<br>
+            将数字按 1～15 顺序排列即获胜
         </p>
 
-        <p>点击下面的按钮，开始你的游戏之旅！</p>
-
-        <button onclick="startGame()">开始游戏</button>
-
-        <div id="message">准备好了吗？</div>
     </div>
 
-    <script>
-        function startGame() {
-            document.getElementById("message").innerText =
-                "🎉 游戏启动成功！欢迎来到游戏世界！";
-        }
-    </script>
+    <!-- 胜利弹窗 -->
+    <div class="win-mask" id="winMask">
+        <div class="win-card">
+            <h2 class="win-title">🎉 恭 喜 通 关</h2>
+            <p class="win-sub">你成功还原了拼图！</p>
+            <div class="win-stats">
+                用时：<b id="winTime">00:00</b><br>
+                步数：<b id="winSteps">0</b>
+            </div>
+            <button class="btn btn-restart">再 玩 一 次</button>
+        </div>
+    </div>
+
+    <!-- 引入游戏逻辑脚本（放在 body 末尾，确保 DOM 先加载） -->
+    <script src="js/game.js"></script>
 
 </body>
 </html>
